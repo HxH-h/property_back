@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.propertysystem.Dao.Mapper.UserMapper">
+
+    <select id="getMessage" resultType="com.propertysystem.Controller.Pojo.Message">
+        SELECT message AS content , time , sender , receiver,houseId , type , status
+        FROM message
+        WHERE (sender = #{userA} AND receiver = #{userB} OR
+        receiver = #{userA} AND sender = #{userB}) AND houseId = #{houseId}
+        ORDER BY time DESC
+        LIMIT #{limit}
+    </select>
+
+    <insert id="saveMessage">
+        INSERT INTO message (sender, receiver , houseId , message, time , status , type)
+        VALUES
+        <foreach collection="list" item="msg" separator=",">
+            (#{msg.sender}, #{msg.receiver}, #{msg.houseId}, #{msg.content}, #{msg.time} , #{msg.status}, #{msg.type})
+        </foreach>
+    </insert>
+
+</mapper>
